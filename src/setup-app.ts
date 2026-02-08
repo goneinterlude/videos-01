@@ -1,43 +1,53 @@
 import express, { Express } from "express";
 
+import { db } from "./db/mock-db"
+
+import { HttpStatus } from "./core/http-statuses"
+import {Video} from "./videos/types/video";
+import {VideoInputDto} from "./videos/dto/video-input.dto";
 export const setupApp = (app: Express) => {
-    app.use(express.json()); // middleware для парсинга JSON в теле запроса
+  app.use(express.json()); // middleware для парсинга JSON в теле запроса
 
-    // основной роут
-    app.get("/", (req, res) => {
-        res.status(200).send("Hello world!");
-    });
-    return app;
-
+  // основной роут
+  app.get("/", (req, res) => {
+    res.status(HttpStatus.Ok).send("Hello world!");
+  });
 
 
-    app.get("/drivers", (req, res) => {
-        // возвращаем всех водителей
-        res.status(200).send(db.drivers);
-    });
+  app.get("/videos", (req, res) => {
+    // возвращаем всех водителей
+    res.status(HttpStatus.Ok).json(db.videos);
+  });
 
-    app.get("/drivers/:id", (req, res) => {
-        // ищем водителя в бд по id
-        const driver = db.drivers.find((d) => d.id === +req.params.id);
-        if (!driver) {
-            return res.status(404).send({ message: "Driver not found" });
-        }
-        // возвращаем ответ
-        res.status(200).send(driver);
-    });
+  app.get("/videos/:id", (req, res) => {
+    // ищем водителя в бд по id
+    const video = db.videos.find((d) => d.id === +req.params.id);
+    if (!video) {
+      return res.status(HttpStatus.NotFound).send({ message: "Video not found" });
+    }
+    // возвращаем ответ
+    res.status(HttpStatus.Ok).send(video);
+  });
 
-    app.post("/drivers", (req, res) => {
-        //1) проверяем приходящие данные на валидность
-        //2) создаем newDriver
-        const newDriver: Driver = {
-            id: db.drivers.length ? db.drivers[db.drivers.length - 1].id + 1 : 1,
-            status: DriverStatus.Online,
-            createdAt: new Date(),
-            ...req.body
-        };
-        //3) добавляем newDriver в БД
-        db.drivers.push(newDriver);
-        //4) возвращаем ответ
-        res.status(201).send(newDriver);
-    });
+  app.post("/videos", (req, res) => {
+    //1) проверяем приходящие данные на валидность
+    //2) создаем newDriver
+    const body = req.body as VideoInputDto;
+
+    const newVideo: Video = {
+      id: Date.now(),
+      title: body.title,
+      author: body.author,
+      availableResolutions: body.availableResolutions,
+      canBeDownloaded: false,
+      minAgeRestriction: null,
+      createdAt: new Date(),
+      publicationDate: new Date(),
+    };
+    //3) добавляем newDriver в БД
+    db.videos.push(newVideo);
+    //4) возвращаем ответ
+    res.status(201).send(newVideo);
+  });
+  return app;
 };
