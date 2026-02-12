@@ -70,9 +70,9 @@ videosRouter
 
   .put("/:id", (req, res) => {
     const videoId = Number(req.params.id);
-    const index = db.videos.findIndex((d) => d.id === videoId);
+    const video = db.videos.find((d) => d.id === videoId);
 
-    if (!index) {
+    if (!video) {
       return res.sendStatus(404);
     }
 
@@ -83,7 +83,7 @@ videosRouter
       return;
     }
 
-    const video = db.videos[index];
+    // const video = db.videos[index];
 
     video.title = req.body.title;
     video.author = req.body.author;
