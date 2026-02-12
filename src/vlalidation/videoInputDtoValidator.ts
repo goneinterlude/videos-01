@@ -37,7 +37,7 @@ export const videoInputDtoValidation = (
       field: "availableResolutions",
     });
   } else {
-    const allowedResolutions = Object.values(VideoResolution);
+    const allowedResolutions = Object.values(VideoResolution) as string[];
 
     const isValid = data.availableResolutions.every(
         (r) => typeof r === "string" && allowedResolutions.includes(r)
