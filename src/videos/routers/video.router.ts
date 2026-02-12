@@ -87,7 +87,7 @@ videosRouter
 
     video.title = req.body.title;
     video.author = req.body.author;
-    video.availableResolutions = req.body.availableResolution;
+    video.availableResolutions = req.body.availableResolutions;
     video.canBeDownloaded = req.body.canBeDownloaded;
     video.minAgeRestriction = req.body.minAgeRestriction;
     video.publicationDate = req.body.publicationDate;
