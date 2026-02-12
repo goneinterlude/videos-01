@@ -7,21 +7,24 @@ export const videoInputDtoValidation = (
 ): ValidationError[] => {
   const errors: ValidationError[] = [];
 
-  if (typeof data.title !== "string") {
+  if (!data || typeof data !== "object") {
+    errors.push({ message: "Invalid title", field: "title" });
+    errors.push({ message: "Invalid author name", field: "author" });
+    errors.push({ message: "Invalid resolution", field: "availableResolutions" });
+    return errors;
+  }
+
+  if (typeof data.title !== "string" || data.title.trim().length > 40 || data.title.trim().length === 0) {
     errors.push({ message: "Invalid title", field: "title" });
   }
 
-  if (data.title.trim().length > 40 || data.title.trim().length === 0) {
-    errors.push({ message: "Invalid title", field: "title" });
-  }
 
-  if (typeof data.author !== "string") {
+
+  if (typeof data.author !== "string" || data.author.trim().length > 20 || data.author.trim().length === 0) {
     errors.push({ message: "Invalid author name", field: "author" });
   }
 
-  if (data.author.trim().length > 20 || data.author.trim().length === 0) {
-    errors.push({ message: "Invalid author name", field: "author" });
-  }
+
 
   if (!Array.isArray(data.availableResolutions)) {
     errors.push({
