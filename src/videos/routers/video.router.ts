@@ -62,6 +62,8 @@ videosRouter
       createdAt: createdAt,
       publicationDate: publicationDate,
     };
+
+
     //3) добавляем newVideo в БД
     db.videos.push(newVideo);
     //4) возвращаем ответ
