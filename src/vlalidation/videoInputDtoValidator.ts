@@ -23,20 +23,28 @@ export const videoInputDtoValidation = (
     errors.push({ message: "Invalid author name", field: "author" });
   }
 
-  if (data.availableResolutions !== undefined) {
-    if (!Array.isArray(data.availableResolutions)) {
-      errors.push({ message: "Invalid resolution", field: "availableResolutions" });
-    } else {
+  if (!Array.isArray(data.availableResolutions)) {
+    errors.push({
+      message: "Invalid resolution",
+      field: "availableResolutions",
+    });
+  } else if (data.availableResolutions.length === 0) {
+    errors.push({
+      message: "Invalid resolution",
+      field: "availableResolutions",
+    });
+  } else {
+    const allowedResolutions = Object.values(VideoResolution);
 
-      const allowedResolutions = Object.values(VideoResolution) as string[];
+    const isValid = data.availableResolutions.every(
+        (r) => typeof r === "string" && allowedResolutions.includes(r)
+    );
 
-      const isValidResolution = data.availableResolutions.every(
-          (r) => typeof r === "string" && allowedResolutions.includes(r)
-      );
-
-      if (!isValidResolution) {
-        errors.push({ message: "Invalid resolution", field: "availableResolutions" });
-      }
+    if (!isValid) {
+      errors.push({
+        message: "Invalid resolution",
+        field: "availableResolutions",
+      });
     }
   }
   return errors;
