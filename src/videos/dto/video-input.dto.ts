@@ -6,4 +6,12 @@ export type VideoInputDto = {
   availableResolutions: VideoResolution[];
 };
 
+  export type VideoUpdateDto = {
+  title: string;
+  author: string;
+  availableResolutions: VideoResolution[];
+  canBeDownloaded: boolean;
+  minAgeRestriction: number | null;
+  publicationDate: string;
+};
 

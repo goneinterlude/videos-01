@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { VideoInputDto } from "../dto/video-input.dto";
 import { videoInputDtoValidation } from "../../vlalidation/videoInputDtoValidator";
+import { videoUpdateDtoValidation } from "../../vlalidation/videoUpdateDtoValidator"
 import { Video, VideoResolution } from "../types/video";
 import { HttpStatus } from "../../core/types/http-statuses";
 import { createErrorMessages } from "../../core/utils/error.utils";
@@ -78,12 +79,13 @@ videosRouter
       return res.sendStatus(HttpStatus.NotFound);
     }
 
-    const errors = videoInputDtoValidation(req.body);
+    const errors = videoUpdateDtoValidation(req.body);
 
     if (errors.length > 0) {
       res.status(HttpStatus.BadRequest).send(createErrorMessages(errors));
       return;
     }
+
 
     // const video = db.videos[index];
 
