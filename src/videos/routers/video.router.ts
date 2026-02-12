@@ -73,7 +73,7 @@ videosRouter
     const video = db.videos.find((d) => d.id === videoId);
 
     if (!video) {
-      return res.sendStatus(404);
+      return res.sendStatus(HttpStatus.NotFound);
     }
 
     const errors = videoInputDtoValidation(req.body);
